@@ -1,8 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PositionMapping.cs">
     <Files>
-      <File FileName="Assets\Scripts\PositionMapping.cs" Line="29" Column="77" />
+      <File FileName="Assets\Scripts\PositionMapping.cs" Line="8" Column="47" />
+      <File FileName="Assets\Scripts\PositionMapping.cs" Line="26" Column="12" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
