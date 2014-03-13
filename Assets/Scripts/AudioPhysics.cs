@@ -16,6 +16,7 @@ public class AudioPhysics : MonoBehaviour {
 	private int playerLayerMask = 1 << 8;
 	private int architectureLayerMask = 1 << 9;
 	private RaycastHit hitInfo;
+	private int savedTime;
 
 	// Use this for initialization
 	void Start () {
@@ -81,12 +82,14 @@ public class AudioPhysics : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Player")) {
 			audio.clip = Resources.Load<AudioClip>("Sounds/" + name) as AudioClip;
+			audio.timeSamples = savedTime;
 			audio.Play();
 		}
 	}
-	
+
 	void OnTriggerExit(Collider other) {
 		if (other.CompareTag("Player")) {
+			savedTime = audio.timeSamples;
 			audio.Stop();
 			Resources.UnloadAsset(audio.clip);
 			audio.clip = null;
