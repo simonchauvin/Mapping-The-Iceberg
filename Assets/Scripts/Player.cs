@@ -14,15 +14,5 @@ public class Player : MonoBehaviour {
 		
 	}
 
-	void OnTriggerEnter(Collider other) {
-		if (other.CompareTag("Sound")) {
-			other.gameObject.SetActive(true);
-		}
-	}
 
-	void OnTriggerExit(Collider other) {
-		if (other.CompareTag("Sound")) {
-			other.gameObject.SetActive(false);
-		}
-	}
 }

@@ -3,6 +3,10 @@ using System.Collections;
 
 public class AudioPhysics : MonoBehaviour {
 	/// <summary>
+	/// Name of the sound to use.
+	/// </summary>
+	public string name;
+	/// <summary>
 	/// The clips.
 	/// </summary>
 	public AudioClip[] clips = new AudioClip[8];
@@ -22,7 +26,7 @@ public class AudioPhysics : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Check if there is an obstacle between the architecture and the player
-		if (Physics.Raycast(transform.position, player.transform.position - transform.position, out hitInfo, Mathf.Infinity)) {
+		/*if (Physics.Raycast(transform.position, player.transform.position - transform.position, out hitInfo, Mathf.Infinity)) {
 			//TODO do something according to the thickness of the wall (hitInfo.collider)
 			if (hitInfo.collider.transform.CompareTag("Player")) {
 				// Select the normal audio clip to play
@@ -71,6 +75,21 @@ public class AudioPhysics : MonoBehaviour {
 			if (!audio.isPlaying) {
 				audio.Play();
 			}
+		}*/
+	}
+
+	void OnTriggerEnter(Collider other) {
+		if (other.CompareTag("Player")) {
+			audio.clip = Resources.Load<AudioClip>("Sounds/" + name) as AudioClip;
+			audio.Play();
+		}
+	}
+	
+	void OnTriggerExit(Collider other) {
+		if (other.CompareTag("Player")) {
+			audio.Stop();
+			Resources.UnloadAsset(audio.clip);
+			audio.clip = null;
 		}
 	}
 }
