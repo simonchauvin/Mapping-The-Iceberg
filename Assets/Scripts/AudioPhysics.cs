@@ -3,15 +3,15 @@ using System.Collections;
 
 public class AudioPhysics : MonoBehaviour {
 	/// <summary>
-	/// Name of the sound to use.
-	/// </summary>
-	public string name;
-	/// <summary>
 	/// The clips.
 	/// </summary>
-	public AudioClip[] clips = new AudioClip[8];
+	public string[] clips = new string[8];
 
 	private Transform player;
+	/// <summary>
+	/// Name of the sound being used.
+	/// </summary>
+	private string currentClip;
 	private World world;
 	private int playerLayerMask = 1 << 8;
 	private int architectureLayerMask = 1 << 9;
@@ -77,12 +77,31 @@ public class AudioPhysics : MonoBehaviour {
 				audio.Play();
 			}
 		}*/
+		// Day or night ?
+		bool timeChanged = false;
+		if (world.isDay()) {
+			if (currentClip == null || !currentClip.Equals(clips[0])) {
+				currentClip = clips[0];
+				timeChanged = true;
+			}
+		} else {
+			if (currentClip == null || !currentClip.Equals(clips[1])) {
+				currentClip = clips[1];
+				timeChanged = true;
+			}
+		}
+		if (timeChanged && audio.isPlaying) {
+			audio.clip = Resources.Load<AudioClip>("Sounds/" + currentClip) as AudioClip;
+			audio.Play();
+		}
 	}
 
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Player")) {
-			audio.clip = Resources.Load<AudioClip>("Sounds/" + name) as AudioClip;
+			Debug.Log(currentClip);
+			audio.clip = Resources.Load<AudioClip>("Sounds/" + currentClip) as AudioClip;
 			audio.timeSamples = savedTime;
+			// TODO audio.timeSamples++ pour faire croire qu'il a continué à se passer des trucs
 			audio.Play();
 		}
 	}
