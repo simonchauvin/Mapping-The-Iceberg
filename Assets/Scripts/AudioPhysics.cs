@@ -22,8 +22,10 @@ public class AudioPhysics : MonoBehaviour {
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player").transform;
 		world = GameObject.FindGameObjectWithTag("World").GetComponent("World") as World;
+		currentClip = null;
+		startSound();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		// Check if there is an obstacle between the architecture and the player
@@ -77,23 +79,7 @@ public class AudioPhysics : MonoBehaviour {
 				audio.Play();
 			}
 		}*/
-		// Day or night ?
-		bool timeChanged = false;
-		if (world.isDay()) {
-			if (currentClip == null || !currentClip.Equals(clips[0])) {
-				currentClip = clips[0];
-				timeChanged = true;
-			}
-		} else {
-			if (currentClip == null || !currentClip.Equals(clips[1])) {
-				currentClip = clips[1];
-				timeChanged = true;
-			}
-		}
-		if (timeChanged && audio.isPlaying) {
-			audio.clip = Resources.Load<AudioClip>("Sounds/" + currentClip) as AudioClip;
-			audio.Play();
-		}
+		startSound();
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -112,6 +98,26 @@ public class AudioPhysics : MonoBehaviour {
 			audio.Stop();
 			Resources.UnloadAsset(audio.clip);
 			audio.clip = null;
+		}
+	}
+
+	private void startSound () {
+		// Day or night ?
+		bool timeChanged = false;
+		if (world.isDay()) {
+			if (currentClip == null || !currentClip.Equals(clips[0])) {
+				currentClip = clips[0];
+				timeChanged = true;
+			}
+		} else {
+			if (currentClip == null || !currentClip.Equals(clips[1])) {
+				currentClip = clips[1];
+				timeChanged = true;
+			}
+		}
+		if (timeChanged && audio.isPlaying) {
+			audio.clip = Resources.Load<AudioClip>("Sounds/" + currentClip) as AudioClip;
+			audio.Play();
 		}
 	}
 }
