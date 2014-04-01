@@ -8,8 +8,6 @@ public class World : MonoBehaviour {
 	public int SUN_RISE;
 	public int SUN_SET;
 	public float STARTING_TIME;
-	public int MIN_TIME_BETWEEN_WEATHER_CHANGE;
-	public int MAX_TIME_BETWEEN_WEATHER_CHANGE;
 
 	/// <summary>
 	/// Speed at which the time is passing.
@@ -22,11 +20,6 @@ public class World : MonoBehaviour {
 	/// </summary>
 	private float time;
 
-	/// <summary>
-	/// The time between weather change in seconds.
-	/// </summary>
-	private float timeBetweenWeatherChange;
-
 	// Use this for initialization
 	void Start () {
 		time = STARTING_TIME * 3600;
@@ -36,13 +29,6 @@ public class World : MonoBehaviour {
 	void Update () {
 		// Time passing
 		time += Time.deltaTime * passingTimeFactor;
-
-		// Weather change
-		timeBetweenWeatherChange += Time.deltaTime * passingTimeFactor;
-		if (timeBetweenWeatherChange >= MIN_TIME_BETWEEN_WEATHER_CHANGE) {
-			if (Random.value > 0.5f) {
-			}
-		}
 
 
 		// End of the day
@@ -57,13 +43,5 @@ public class World : MonoBehaviour {
 	/// <returns><c>true</c>, if day, <c>false</c> otherwise.</returns>
 	public bool isDay () {
 		return time > SUN_RISE * 3600 && time < SUN_SET * 3600;
-	}
-
-	/// <summary>
-	/// Checks if it is raining.
-	/// </summary>
-	/// <returns><c>true</c>, if raining, <c>false</c> otherwise.</returns>
-	public bool isRaining() {
-		return false;
 	}
 }
