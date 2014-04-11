@@ -70,7 +70,7 @@ public class AudioPhysics : MonoBehaviour {
 		if (timeTransitioning) {
 			timerTimeTransition += Time.deltaTime;
 			if (!endingTransition) {
-				audio.volume = Mathf.Lerp(1.0f, 0.0f, timerTimeTransition / 1.5f);
+				audio.volume = Mathf.Lerp(1.0f, 0.0f, timerTimeTransition / 6.5f);
 				if (audio.volume <= 0.0f) {
                     int time = audio.timeSamples;
 					/*int time = 0;
@@ -95,7 +95,7 @@ public class AudioPhysics : MonoBehaviour {
 					transitionToNightFiltered = false;
 				}
 			} else if (canEndTransition) {
-				audio.volume = Mathf.Lerp(0.0f, 1.0f, timerTimeTransition / 1.5f);
+				audio.volume = Mathf.Lerp(0.0f, 1.0f, timerTimeTransition / 6.5f);
 				if (audio.volume >= 1.0f) {
 					timeTransitioning = false;
 					endingTransition = false;
@@ -195,7 +195,6 @@ public class AudioPhysics : MonoBehaviour {
 							currentClip = clips[0];
 							audio.clip = Resources.Load<AudioClip>("Sounds/" + clips[0]) as AudioClip;
 							if (audio.clip != null) {
-                                Debug.Log(savedTimeDay);
 								audio.timeSamples = savedTimeDay;
 								audio.Play();
 							}
@@ -349,7 +348,7 @@ public class AudioPhysics : MonoBehaviour {
 			if (audio.clip != null) {
 				savedTime = audio.timeSamples;
 				audio.Stop();
-				Resources.UnloadAsset(audio.clip);
+                Resources.UnloadUnusedAssets();
 				audio.clip = null;
 				timeTransitioning = false;
 				wallTransitioning = false;
