@@ -6,6 +6,8 @@ public class AudioPhysics : MonoBehaviour {
 	public const string TRANSITION_FROM_NIGHT = "NIGHT";
 	public const string TRANSITION_FROM_DAY_FILTERED = "DAY FILTERED";
 	public const string TRANSITION_FROM_NIGHT_FILTERED = "NIGHT FILTERED";
+
+    public float maxVolume = 1.0f;
 	/// <summary>
 	/// The clips.
 	/// </summary>
@@ -70,7 +72,7 @@ public class AudioPhysics : MonoBehaviour {
 		if (timeTransitioning) {
 			timerTimeTransition += Time.deltaTime;
 			if (!endingTransition) {
-				audio.volume = Mathf.Lerp(1.0f, 0.0f, timerTimeTransition / 6.5f);
+                audio.volume = Mathf.Lerp(maxVolume, 0.0f, timerTimeTransition / 6.5f);
 				if (audio.volume <= 0.0f) {
                     int time = audio.timeSamples;
 					/*int time = 0;
@@ -95,8 +97,9 @@ public class AudioPhysics : MonoBehaviour {
 					transitionToNightFiltered = false;
 				}
 			} else if (canEndTransition) {
-				audio.volume = Mathf.Lerp(0.0f, 1.0f, timerTimeTransition / 6.5f);
-				if (audio.volume >= 1.0f) {
+                audio.volume = Mathf.Lerp(0.0f, maxVolume, timerTimeTransition / 6.5f);
+                if (audio.volume >= maxVolume)
+                {
 					timeTransitioning = false;
 					endingTransition = false;
 					newAudio = null;
@@ -111,7 +114,7 @@ public class AudioPhysics : MonoBehaviour {
 			//Transitionning from or to a filtered sound
 			timerWallTransition += Time.deltaTime;
 			if (!endingTransition) {
-				audio.volume = Mathf.Lerp(1.0f, 0.0f, timerWallTransition / 0.5f);
+                audio.volume = Mathf.Lerp(maxVolume, 0.0f, timerWallTransition / 0.5f);
 				if (audio.volume <= 0.0f) {
                     int time = audio.timeSamples;
 					audio.Stop();
@@ -123,8 +126,9 @@ public class AudioPhysics : MonoBehaviour {
 					endingTransition = true;
 				}
 			} else if (canEndTransition) {
-				audio.volume = Mathf.Lerp(0.0f, 1.0f, timerWallTransition / 0.5f);
-				if (audio.volume >= 1.0f) {
+                audio.volume = Mathf.Lerp(0.0f, maxVolume, timerWallTransition / 0.5f);
+                if (audio.volume >= maxVolume)
+                {
 					wallTransitioning = false;
 					endingTransition = false;
 					newAudio = null;
