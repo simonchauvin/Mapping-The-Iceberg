@@ -27,6 +27,7 @@ public class AudioPhysics : MonoBehaviour {
 	private int soundLayerMask = 1 << 10;
 	private RaycastHit hitInfo;
 	private int savedTime;
+	private int savedTimeChanging;
 	private int savedTimeDay;
 	private int savedTimeNight;
 	private int savedTimeDayFiltered;
@@ -96,11 +97,13 @@ public class AudioPhysics : MonoBehaviour {
 				if (transitionSource.clip == null) {
 					transitionSource.clip = newAudio;
 					transitionSource.volume = 0.0f;
+					transitionSource.timeSamples = savedTimeChanging;
 					transitionSource.Play();
 				}
 				transitionSource.volume = Mathf.Lerp(0.0f, maxVolume, timerTimeTransition2 / 8.5f);
 				if (transitionSource.volume >= maxVolume)
                 {
+					savedTimeChanging = defaultSource.timeSamples;
 					timeTransitioning = false;
 					timerTimeTransition2 = 0.0f;
 					timeTransitioning = false;
