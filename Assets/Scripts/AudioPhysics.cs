@@ -82,6 +82,7 @@ public class AudioPhysics : MonoBehaviour {
 		// Transitionning from or to a day or night song
 		if (timeTransitioning) {
 			if (!endingTransition) {
+				//Debug.Log("fade out");
 				defaultSource.volume = 0.0f;
 				defaultSource.volume = Mathf.Lerp(maxVolume, 0.0f, timerTimeTransition1 / 8.5f);
 				if (defaultSource.volume <= 0.0f) {
@@ -191,7 +192,6 @@ public class AudioPhysics : MonoBehaviour {
 								savedTimeNightFiltered = audio.timeSamples;
 								timeChanged = true;
 							}
-							currentClip = clips[0];
 							if (timeChanged) {
 								timeTransitioning = true;
 								timerTimeTransition1 = 0.0f;
@@ -199,7 +199,11 @@ public class AudioPhysics : MonoBehaviour {
 								wallTransitioning = false;
 								timerWallTransition1 = 0.0f;
 								timerWallTransition2 = 0.0f;
-								endingTransition = false;
+								if (currentClip.Length == 0) {
+									endingTransition = true;
+								} else {
+									endingTransition = false;
+								}
 								canEndTransition = false;
 							} else if (wallChanged) {
 								wallTransitioning = true;
@@ -211,6 +215,7 @@ public class AudioPhysics : MonoBehaviour {
 								endingTransition = false;
 								canEndTransition = false;
 							}
+							currentClip = clips[0];
 							newAudio = Resources.Load<AudioClip>("Sounds/" + clips[0]) as AudioClip;
 							if (newAudio != null) {
 								if (timeTransitioning) {
@@ -219,6 +224,7 @@ public class AudioPhysics : MonoBehaviour {
 								canEndTransition = true;
 							}
 						} else if (currentClip == null) {
+							Debug.Log(transitionFrom);
 							currentClip = clips[0];
 							audio.clip = Resources.Load<AudioClip>("Sounds/" + clips[0]) as AudioClip;
 							if (audio.clip != null) {
@@ -240,7 +246,6 @@ public class AudioPhysics : MonoBehaviour {
 								savedTime = audio.timeSamples;
 								wallChanged = true;
 							}
-							currentClip = clips[1];
 							if (timeChanged) {
 								timeTransitioning = true;
 								timerTimeTransition1 = 0.0f;
@@ -248,7 +253,11 @@ public class AudioPhysics : MonoBehaviour {
 								wallTransitioning = false;
 								timerWallTransition1 = 0.0f;
 								timerWallTransition2 = 0.0f;
-								endingTransition = false;
+								if (currentClip.Length == 0) {
+									endingTransition = true;
+								} else {
+									endingTransition = false;
+								}
 								canEndTransition = false;
 							} else if (wallChanged) {
 								wallTransitioning = true;
@@ -260,6 +269,7 @@ public class AudioPhysics : MonoBehaviour {
 								endingTransition = false;
 								canEndTransition = false;
 							}
+							currentClip = clips[1];
 							newAudio = Resources.Load<AudioClip>("Sounds/" + clips[1]) as AudioClip;
 							if (newAudio != null) {
 								if (timeTransitioning) {
