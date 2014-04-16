@@ -82,7 +82,6 @@ public class AudioPhysics : MonoBehaviour {
 		// Transitionning from or to a day or night song
 		if (timeTransitioning) {
 			if (!endingTransition) {
-				//Debug.Log("fade out");
 				defaultSource.volume = 0.0f;
 				defaultSource.volume = Mathf.Lerp(maxVolume, 0.0f, timerTimeTransition1 / 8.5f);
 				if (defaultSource.volume <= 0.0f) {
@@ -92,6 +91,7 @@ public class AudioPhysics : MonoBehaviour {
 					transitionToNight = false;
 					transitionToDayFiltered = false;
 					transitionToNightFiltered = false;
+					savedTimeChanging = defaultSource.timeSamples;
 				}
 			}
 			if (canEndTransition) {
@@ -104,7 +104,6 @@ public class AudioPhysics : MonoBehaviour {
 				transitionSource.volume = Mathf.Lerp(0.0f, maxVolume, timerTimeTransition2 / 8.5f);
 				if (transitionSource.volume >= maxVolume)
                 {
-					savedTimeChanging = defaultSource.timeSamples;
 					timeTransitioning = false;
 					timerTimeTransition2 = 0.0f;
 					timeTransitioning = false;
@@ -224,7 +223,6 @@ public class AudioPhysics : MonoBehaviour {
 								canEndTransition = true;
 							}
 						} else if (currentClip == null) {
-							Debug.Log(transitionFrom);
 							currentClip = clips[0];
 							audio.clip = Resources.Load<AudioClip>("Sounds/" + clips[0]) as AudioClip;
 							if (audio.clip != null) {
