@@ -11,16 +11,17 @@ public class AudioPhysics : MonoBehaviour {
 	/// <summary>
 	/// The clips.
 	/// </summary>
-	public string[] clips = new string[4];
+	public int[] clips = new int[4];
 
 	public float timeTransitionTime = 3.0f;
 	public float wallTransitionTime = 1.0f;
 
 	private Transform player;
+    private SoundManager soundManager;
 	/// <summary>
 	/// Name of the sound being used.
 	/// </summary>
-	private string currentClip;
+	private int currentClip;
 	private World world;
 	private int playerLayerMask = 1 << 8;
 	private int otherLayerMask = 1 << 9;
@@ -54,8 +55,9 @@ public class AudioPhysics : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player").transform;
+        soundManager = GameObject.FindObjectOfType<SoundManager>();
 		world = GameObject.FindGameObjectWithTag("World").GetComponent("World") as World;
-		currentClip = null;
+		currentClip = -1;
 		newAudio = null;
 		timeTransitioning = false;
 		wallTransitioning = false;
@@ -167,8 +169,8 @@ public class AudioPhysics : MonoBehaviour {
 			Debug.DrawLine(transform.position, hitInfo.point, Color.blue);
 			//Enter the trigger area
 			if (audio.clip == null) {
-				audio.clip = Resources.Load<AudioClip>("Sounds/" + currentClip) as AudioClip;
-				if (audio.clip != null) {
+				if (currentClip != -1 && currentClip != 0) {
+                    audio.clip = soundManager.audioSources[currentClip - 1];
 					audio.timeSamples = savedTime;
 					audio.Play();
 				}
@@ -180,7 +182,7 @@ public class AudioPhysics : MonoBehaviour {
 					// Select the normal audio clip to play
 					if (world.isDay()) {
 						// Day
-						if (currentClip != null && !transitionFrom.Equals(TRANSITION_FROM_DAY)) {
+						if (currentClip != -1 && !transitionFrom.Equals(TRANSITION_FROM_DAY)) {
 							if (transitionFrom.Equals(TRANSITION_FROM_NIGHT)) {
 								savedTimeNight = audio.timeSamples;
 								timeChanged = true;
@@ -198,7 +200,7 @@ public class AudioPhysics : MonoBehaviour {
 								wallTransitioning = false;
 								timerWallTransition1 = 0.0f;
 								timerWallTransition2 = 0.0f;
-								if (currentClip.Length == 0) {
+								if (currentClip == 0) {
 									endingTransition = true;
 								} else {
 									endingTransition = false;
@@ -215,17 +217,17 @@ public class AudioPhysics : MonoBehaviour {
 								canEndTransition = false;
 							}
 							currentClip = clips[0];
-							newAudio = Resources.Load<AudioClip>("Sounds/" + clips[0]) as AudioClip;
-							if (newAudio != null) {
+                            if (currentClip != -1 && currentClip != 0) {
+                                newAudio = soundManager.audioSources[currentClip - 1];
 								if (timeTransitioning) {
 									transitionToDay = true;
 								}
 								canEndTransition = true;
 							}
-						} else if (currentClip == null) {
+						} else if (currentClip == -1) {
 							currentClip = clips[0];
-							audio.clip = Resources.Load<AudioClip>("Sounds/" + clips[0]) as AudioClip;
-							if (audio.clip != null) {
+							if (currentClip != -1 && currentClip != 0) {
+                                audio.clip = soundManager.audioSources[currentClip - 1];
 								audio.timeSamples = savedTimeDay;
 								audio.Play();
 							}
@@ -233,7 +235,7 @@ public class AudioPhysics : MonoBehaviour {
 						transitionFrom = TRANSITION_FROM_DAY;
 					} else {
 						// Night
-						if (currentClip != null && !transitionFrom.Equals(TRANSITION_FROM_NIGHT)) {
+						if (currentClip != -1 && !transitionFrom.Equals(TRANSITION_FROM_NIGHT)) {
 							if (transitionFrom.Equals(TRANSITION_FROM_DAY)) {
 								savedTimeDay = audio.timeSamples;
 								timeChanged = true;
@@ -251,7 +253,7 @@ public class AudioPhysics : MonoBehaviour {
 								wallTransitioning = false;
 								timerWallTransition1 = 0.0f;
 								timerWallTransition2 = 0.0f;
-								if (currentClip.Length == 0) {
+								if (currentClip == 0) {
 									endingTransition = true;
 								} else {
 									endingTransition = false;
@@ -268,17 +270,17 @@ public class AudioPhysics : MonoBehaviour {
 								canEndTransition = false;
 							}
 							currentClip = clips[1];
-							newAudio = Resources.Load<AudioClip>("Sounds/" + clips[1]) as AudioClip;
-							if (newAudio != null) {
+                            if (currentClip != -1 && currentClip != 0) {
+                                newAudio = soundManager.audioSources[currentClip - 1];
 								if (timeTransitioning) {
 									transitionToNight = true;
 								}
 								canEndTransition = true;
 							}
-						} else if (currentClip == null) {
+						} else if (currentClip == -1) {
 							currentClip = clips[1];
-							audio.clip = Resources.Load<AudioClip>("Sounds/" + clips[1]) as AudioClip;
-							if (audio.clip != null) {
+                            if (currentClip != -1 && currentClip != 0) {
+                                audio.clip = soundManager.audioSources[currentClip - 1]; ;
 								audio.timeSamples = savedTimeNight;
 								audio.Play();
 							}
@@ -289,7 +291,7 @@ public class AudioPhysics : MonoBehaviour {
 					// Select the filtered audio clip to play
 					if (world.isDay()) {
 						// Day filtered
-						if (currentClip != null && !transitionFrom.Equals(TRANSITION_FROM_DAY_FILTERED)) {
+						if (currentClip != -1 && !transitionFrom.Equals(TRANSITION_FROM_DAY_FILTERED)) {
 							// Transition
 							if (transitionFrom.Equals(TRANSITION_FROM_DAY)) {
 								savedTime = audio.timeSamples;
@@ -321,17 +323,17 @@ public class AudioPhysics : MonoBehaviour {
 								endingTransition = false;
 								canEndTransition = false;
 							}
-							newAudio = Resources.Load<AudioClip>("Sounds/" + clips[2]) as AudioClip;
-							if (newAudio != null) {
+                            if (currentClip != -1 && currentClip != 0) {
+                                newAudio = soundManager.audioSources[currentClip - 1];
 								if (timeTransitioning) {
 									transitionToDayFiltered = true;
 								}
 								canEndTransition = true;
 							}
-						} else if (currentClip == null) {
+						} else if (currentClip == -1) {
 							currentClip = clips[2];
-							audio.clip = Resources.Load<AudioClip>("Sounds/" + clips[2]) as AudioClip;
-							if (audio.clip != null) {
+                            if (currentClip != -1 && currentClip != 0) {
+                                audio.clip = soundManager.audioSources[currentClip - 1];
 								audio.timeSamples = savedTimeDayFiltered;
 								audio.Play();
 							}
@@ -339,7 +341,7 @@ public class AudioPhysics : MonoBehaviour {
 						transitionFrom = TRANSITION_FROM_DAY_FILTERED;
 					} else {
 						// Night filtered
-						if (currentClip != null && !transitionFrom.Equals(TRANSITION_FROM_NIGHT_FILTERED)) {
+						if (currentClip != -1 && !transitionFrom.Equals(TRANSITION_FROM_NIGHT_FILTERED)) {
 							// Transition
 							if (transitionFrom.Equals(TRANSITION_FROM_DAY)) {
 								savedTimeDay = audio.timeSamples;
@@ -371,17 +373,17 @@ public class AudioPhysics : MonoBehaviour {
 								endingTransition = false;
 								canEndTransition = false;
 							}
-							newAudio = Resources.Load<AudioClip>("Sounds/" + clips[3]) as AudioClip;
-							if (newAudio != null) {
+                            if (currentClip != -1 && currentClip != 0) {
+                                newAudio = soundManager.audioSources[currentClip - 1];
 								if (timeTransitioning) {
 									transitionToNightFiltered = true;
 								}
 								canEndTransition = true;
 							}
-						} else if (currentClip == null) {
+						} else if (currentClip == -1) {
 							currentClip = clips[3];
-							audio.clip = Resources.Load<AudioClip>("Sounds/" + clips[3]) as AudioClip;
-							if (audio.clip != null) {
+							if (currentClip != -1 && currentClip != 0) {
+                                audio.clip = soundManager.audioSources[currentClip - 1];
 								audio.timeSamples = savedTimeNightFiltered;
 								audio.Play();
 							}
@@ -402,7 +404,6 @@ public class AudioPhysics : MonoBehaviour {
 				}
 				savedTime = defaultSource.timeSamples;
 				defaultSource.Stop();
-                Resources.UnloadUnusedAssets();
 				audio.clip = null;
 				timeTransitioning = false;
 				wallTransitioning = false;
