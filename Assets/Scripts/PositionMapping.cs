@@ -62,9 +62,9 @@ public class PositionMapping : MonoBehaviour {
 			if (dataPhone != null && dataPhone.Length > 0) {
 				dataArray = Regex.Split(dataPhone, "direction:");
 				float direction = float.Parse(Regex.Split(dataArray[1], "accelerometer:")[0]);
-				float accelerometer = float.Parse(Regex.Split(dataArray[1], "accelerometer:")[1]);
+				//float accelerometer = float.Parse(Regex.Split(dataArray[1], "accelerometer:")[1]);
 				transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -direction, transform.localEulerAngles.z);
-				transform.localEulerAngles = new Vector3(-accelerometer * 9, transform.localEulerAngles.y, transform.localEulerAngles.z);
+				//transform.localEulerAngles = new Vector3(-accelerometer * 9, transform.localEulerAngles.y, transform.localEulerAngles.z);
 			}
 		}
 	}
